@@ -1,3 +1,5 @@
 - remove unused packages
 - put the api key in a .env file
 - set up a proper database to store secret, then update readme
+- store route in database to read, if nothing found, default to using portfolio_dummy.csv
+- mock the report generation process, and return a dummy report

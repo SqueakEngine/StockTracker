@@ -15,9 +15,9 @@ public class StockService
         _dataSource = dataSource;
     }
 
-    public async Task RunAsync(string ticker)
+    public async Task<double?> RunAsync(string ticker)
     {
-        if (string.IsNullOrWhiteSpace(ticker)) return;
+        if (string.IsNullOrWhiteSpace(ticker)) return null;
 
         try
         {
@@ -33,10 +33,10 @@ public class StockService
             if (latest?.Rsi == null)
             {
                 Console.WriteLine($"[INFO] insufficient data to calculate RSI for {ticker}");
-                return;
+                return null;
             }
 
-            double rsi = (double)latest.Rsi;
+            double rsi = (double)latest?.Rsi;
             Console.WriteLine($"{ticker.ToUpper()} | Date: {latest.Date:yyyy-MM-dd} | RSI: {rsi:F2}");
 
             // <30 Oversold, >70 Overbought
@@ -55,10 +55,12 @@ public class StockService
                 Console.WriteLine("SIGNAL: NEUTRAL (HOLD)");
             }
             Console.ResetColor();
+            return latest?.Rsi;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"[ERROR] {ticker}: {ex.Message}");
+            return null;
         }
     }
 }
